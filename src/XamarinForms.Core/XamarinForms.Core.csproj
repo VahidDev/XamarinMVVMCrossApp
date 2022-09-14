@@ -12,9 +12,4 @@
     <PackageReference Include="MvvmCross" Version="8.0.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Events\FragmentC\" />
-    <Folder Include="Events\FragmentD\" />
-  </ItemGroup>
-
 </Project>

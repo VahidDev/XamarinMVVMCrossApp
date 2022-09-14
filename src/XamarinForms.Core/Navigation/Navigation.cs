@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using XamarinForms.Core.ViewModels.FragmentB;
 
 namespace XamarinForms.Core.Navigation
 {
@@ -35,22 +33,10 @@ namespace XamarinForms.Core.Navigation
 
         public void Navigate(IMvxViewModel mvxViewModel)
         {
-            _currentIndex++;
-            _mvxViewModels.Add((MvxViewModel) mvxViewModel);
+            //_currentIndex++;
+            //_mvxViewModels.Add((MvxViewModel) mvxViewModel);
 
             _navigationService.Navigate(mvxViewModel);
         }
-
-        public void NavigateToB()
-        {
-            _navigationService.Navigate(Mvx.IoCProvider.Resolve<FragmentBViewModel>());
-        }
-
-        public void NavigateToA()
-        {
-
-            _navigationService.Navigate(Mvx.IoCProvider.Resolve<FragmentBViewModel>());
-        }
-
     }
 }

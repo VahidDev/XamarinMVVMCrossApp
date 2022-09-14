@@ -1,11 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<views:MvxContentPage x:Class="XamarinForms.UI.Pages.FragmentAPage"
+<views:MvxContentPage x:Class="XamarinForms.UI.Pages.FragmentDPage"
                       xmlns="http://xamarin.com/schemas/2014/forms"
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                      xmlns:viewModels="clr-namespace:XamarinForms.Core.ViewModels.FragmentA;assembly=XamarinForms.Core"
+                      xmlns:core="clr-namespace:XamarinForms.Core;assembly=XamarinForms.Core"
+                      xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
+                      xmlns:viewModels="clr-namespace:XamarinForms.Core.ViewModels.FragmentD;assembly=XamarinForms.Core"
                       xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
-                      Title="Fragment A"
-                      x:TypeArguments="viewModels:FragmentAViewModel"
+                      Title="Fragment D"
+                      x:TypeArguments="viewModels:FragmentDViewModel"
                       Background="#AED6F1">
     <ContentPage.Resources>
         <Style x:Key="CounterButtonStyle" TargetType="Button">
@@ -33,11 +35,11 @@
                 <StackLayout>
                     <Button Command="{Binding IncrementCounterCommand}"
                             Style="{StaticResource CounterButtonStyle}"
-                            Text="Fragment A counter" />
+                            Text="Fragment D counter" />
                     <Label FontAttributes="Bold"
                            FontSize="20"
                            HorizontalOptions="Center"
-                           Text="{Binding CounterA}" />
+                           Text="{Binding CounterD}" />
                 </StackLayout>
                 <StackLayout>
                     <Button Style="{StaticResource CounterButtonStyle}" Text="GLobal backgorund counter" />
@@ -48,11 +50,11 @@
                 </StackLayout>
             </StackLayout>
             <StackLayout Grid.Row="1"
-                         Margin="0,0,0,10"
                          HorizontalOptions="Center"
                          Orientation="Horizontal"
                          Spacing="10">
                 <Button Background="#48C9B0"
+                        Command="{Binding GoToACommand}"
                         Style="{StaticResource NavButtonStyle}"
                         Text="A" />
                 <Button Background="#F9E79F"
@@ -64,7 +66,6 @@
                         Style="{StaticResource NavButtonStyle}"
                         Text="C" />
                 <Button Background="#D7BDE2"
-                        Command="{Binding GoToDCommand}"
                         Style="{StaticResource NavButtonStyle}"
                         Text="D" />
             </StackLayout>

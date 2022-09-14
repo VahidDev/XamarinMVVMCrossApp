@@ -1,12 +1,21 @@
-using System;
 using MvvmCross.Commands;
 using System.Windows.Input;
+using MvvmCross;
+using XamarinForms.Core.ViewModels.FragmentA;
+using XamarinForms.Core.ViewModels.FragmentB;
+using XamarinForms.Core.Navigation;
+using XamarinForms.Core.ViewModels.FragmentC;
+using XamarinForms.Core.Globals;
 
 namespace XamarinForms.Core.ViewModels.FragmentD
 {
-    public class FragmentDViewModel : BaseViewModel
+    public class FragmentDViewModel
+        : BaseViewModel
+        , IFragmentDViewModel
     {
+        private readonly INavigation _navigation;
         private int _counterD;
+
         public int CounterD
         {
             get => _counterD;
@@ -21,26 +30,37 @@ namespace XamarinForms.Core.ViewModels.FragmentD
         public ICommand GoToBCommand { get; set; }
         public ICommand GoToCCommand { get; set; }
         public ICommand GoToACommand { get; set; }
-        public ICommand GoBackCommand { get; set; }
 
-        public FragmentDViewModel()
+        public IGlobalModule Globalmodule { get; }
+
+        public FragmentDViewModel
+            ( INavigation navigation
+            , IGlobalModule globalModule)
         {
-            IncrementCounterCommand = new MvxCommand(IncrementCounter);
+            _navigation = navigation;
+            Globalmodule = globalModule;
 
+            IncrementCounterCommand = new MvxCommand(IncrementCounter);
             GoToACommand = new MvxCommand(GoToA);
             GoToBCommand = new MvxCommand(GoToB);
             GoToCCommand = new MvxCommand(GoToC);
-            GoBackCommand = new MvxCommand(GoBack);
         }
 
         private void IncrementCounter() => CounterD++;
 
-        private void GoBack() => throw new NotImplementedException();
+        private void GoToA()
+        {
+            _navigation.Navigate(Mvx.IoCProvider.Resolve<IFragmentAViewModel>());
+        }
 
-        private void GoToA() => throw new NotImplementedException();
+        private void GoToB()
+        {
+            _navigation.Navigate(Mvx.IoCProvider.Resolve<IFragmentBViewModel>());
+        }
 
-        private void GoToC() => throw new NotImplementedException();
-
-        private void GoToB() => throw new NotImplementedException();
+        private void GoToC()
+        {
+            _navigation.Navigate(Mvx.IoCProvider.Resolve<IFragmentCViewModel>());
+        }
     }
 }

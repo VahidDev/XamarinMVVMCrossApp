@@ -1,18 +1,20 @@
-using System;
 using MvvmCross.Commands;
 using System.Windows.Input;
-using MvvmCross.Navigation;
-using XamarinForms.Core.ViewModels.FragmentB;
 using MvvmCross;
+using XamarinForms.Core.ViewModels.FragmentB;
+using XamarinForms.Core.Navigation;
+using XamarinForms.Core.ViewModels.FragmentD;
+using XamarinForms.Core.ViewModels.FragmentC;
+using XamarinForms.Core.Globals;
 
 namespace XamarinForms.Core.ViewModels.FragmentA
 {
-    public class FragmentAViewModel : BaseViewModel
+    public class FragmentAViewModel
+        : BaseViewModel
+        , IFragmentAViewModel
     {
 
-        private int _sharedCounter;
-        private readonly IMvxNavigationService _mvxNavigationService;
-        private readonly FragmentBViewModel _fragmentBViewModel;
+        private readonly INavigation _navigation;
         private int _counterA;
 
         public int CounterA
@@ -25,55 +27,42 @@ namespace XamarinForms.Core.ViewModels.FragmentA
             }
         }
 
-        public int SharedCounter
-        {
-            get => _sharedCounter;
-            set
-            {
-                _sharedCounter = value;
-                RaisePropertyChanged(() => SharedCounter);
-            }
-        }
-
         public ICommand IncrementCounterCommand { get; set; }
-        public ICommand IncrementSharedCounterCommand { get; set; }
         public ICommand GoToBCommand { get; set; }
         public ICommand GoToCCommand { get; set; }
         public ICommand GoToDCommand { get; set; }
-        public ICommand GoBackCommand { get; set; }
+
+        public IGlobalModule Globalmodule { get; }
 
         public FragmentAViewModel
-            ( IGlobalModule globalModule
-            , IMvxNavigationService mvxNavigationService
-            
+            ( INavigation navigation
+            , IGlobalModule globalModule
             )
         {
-            _sharedCounter = globalModule.Counter;
-            _mvxNavigationService = mvxNavigationService;
-            //_fragmentBViewModel = Mvx.IoCProvider.Resolve<FragmentBViewModel>();
+            _navigation = navigation;
+            Globalmodule = globalModule;
 
             IncrementCounterCommand = new MvxCommand(IncrementCounter);
-            IncrementSharedCounterCommand = new MvxCommand(IncrementSharedCounter);
-
             GoToBCommand = new MvxCommand(GoToB);
             GoToCCommand = new MvxCommand(GoToC);
             GoToDCommand = new MvxCommand(GoToD);
-            GoBackCommand = new MvxCommand(GoBack);
         }
 
         private void IncrementCounter() => CounterA++;
-        private void IncrementSharedCounter() => SharedCounter++;
-
-        private void GoBack() => throw new NotImplementedException();
-
-        private void GoToD() => throw new NotImplementedException();
-
-        private void GoToC() => throw new NotImplementedException();
 
         private void GoToB()
         {
-            _mvxNavigationService.Navigate(_fragmentBViewModel);
-            //_mediator.Send(Mvx.IoCProvider.Resolve(typeof(FragmentBRequest)));
+            _navigation.Navigate(Mvx.IoCProvider.Resolve<IFragmentBViewModel>());
+        }
+
+        private void GoToC()
+        {
+            _navigation.Navigate(Mvx.IoCProvider.Resolve<IFragmentCViewModel>());
+        }
+
+        private void GoToD()
+        {
+            _navigation.Navigate(Mvx.IoCProvider.Resolve<IFragmentDViewModel>());
         }
     }
 }

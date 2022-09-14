@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace XamarinForms.Core.ViewModels.Main
 {
-    public class MainViewModel : BaseViewModel
+    public class MainViewModel: BaseViewModel
     {
     }
 }

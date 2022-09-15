@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -9,7 +10,10 @@ namespace XamarinForms.Core.Globals
         : INotifyPropertyChanged
         , IGlobalModule
     {
+        private static object _lock = new object();
+        private bool _timerStarted;
         private int _counter;
+        private Timer _timer;
 
         public int Counter
         {
@@ -23,20 +27,29 @@ namespace XamarinForms.Core.Globals
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-
-        public GlobalModule()
+        public void StartBackgroundTimer()
         {
-            SetBackgroundTimer();
+            if (!_timerStarted)
+            {
+                lock (_lock)
+                {
+                    if (!_timerStarted)
+                    {
+                        InitializeTimer();
+                        _timerStarted = true;
+                    }
+                }
+            }
         }
 
-        private Task SetBackgroundTimer()
+        private Task InitializeTimer()
         {
             return Task.Run(() =>
             {
-                var myTimer = new Timer();
-                myTimer.Elapsed += new ElapsedEventHandler(IncrementCounterEvent);
-                myTimer.Interval = 2000;
-                myTimer.Start();
+                _timer = new Timer();
+                _timer.Elapsed += new ElapsedEventHandler(IncrementCounterEvent);
+                _timer.Interval = 2000;
+                _timer.Start();
             });
         }
 

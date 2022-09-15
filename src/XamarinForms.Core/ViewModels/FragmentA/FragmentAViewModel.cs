@@ -1,4 +1,4 @@
-using MvvmCross.Commands;
+ using MvvmCross.Commands;
 using System.Windows.Input;
 using MvvmCross;
 using XamarinForms.Core.ViewModels.FragmentB;
@@ -6,6 +6,7 @@ using XamarinForms.Core.Navigation;
 using XamarinForms.Core.ViewModels.FragmentD;
 using XamarinForms.Core.ViewModels.FragmentC;
 using XamarinForms.Core.Globals;
+using MvvmCross.Base;
 
 namespace XamarinForms.Core.ViewModels.FragmentA
 {
@@ -16,6 +17,8 @@ namespace XamarinForms.Core.ViewModels.FragmentA
 
         private readonly INavigation _navigation;
         private int _counterA;
+        private int _sharedCounter;
+        private IGlobalModule _globalModule { get; }
 
         public int CounterA
         {
@@ -27,12 +30,21 @@ namespace XamarinForms.Core.ViewModels.FragmentA
             }
         }
 
+        public int SharedCounter
+        {
+            get => _sharedCounter;
+            set
+            {
+                _sharedCounter = value;
+                RaisePropertyChanged(() => SharedCounter);
+            }
+        }
+
         public ICommand IncrementCounterCommand { get; set; }
         public ICommand GoToBCommand { get; set; }
         public ICommand GoToCCommand { get; set; }
         public ICommand GoToDCommand { get; set; }
 
-        public IGlobalModule Globalmodule { get; }
 
         public FragmentAViewModel
             ( INavigation navigation
@@ -40,15 +52,21 @@ namespace XamarinForms.Core.ViewModels.FragmentA
             )
         {
             _navigation = navigation;
-            Globalmodule = globalModule;
+            _globalModule = globalModule;
 
             IncrementCounterCommand = new MvxCommand(IncrementCounter);
             GoToBCommand = new MvxCommand(GoToB);
             GoToCCommand = new MvxCommand(GoToC);
             GoToDCommand = new MvxCommand(GoToD);
+             
+            _globalModule.GlobalCounterChangedEvent += () => Mvx.IoCProvider
+            .Resolve<IMvxMainThreadAsyncDispatcher>()
+            .ExecuteOnMainThreadAsync(()=> IncrementSharedCounter());
         }
 
         private void IncrementCounter() => CounterA++;
+
+        private void IncrementSharedCounter() => SharedCounter =_globalModule.Counter;
 
         private void GoToB()
         {

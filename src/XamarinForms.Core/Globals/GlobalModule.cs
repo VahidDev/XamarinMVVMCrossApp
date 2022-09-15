@@ -15,6 +15,9 @@ namespace XamarinForms.Core.Globals
         private int _counter;
         private Timer _timer;
 
+        public event Action GlobalCounterChangedEvent;
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public int Counter
         {
             get => _counter;
@@ -24,8 +27,6 @@ namespace XamarinForms.Core.Globals
                 OnPropertyChanged();
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public void StartBackgroundTimer()
         {
@@ -47,15 +48,16 @@ namespace XamarinForms.Core.Globals
             return Task.Run(() =>
             {
                 _timer = new Timer();
-                _timer.Elapsed += new ElapsedEventHandler(IncrementCounterEvent);
+                _timer.Elapsed += new ElapsedEventHandler(OnGlobalCounterChangedEvent);
                 _timer.Interval = 2000;
                 _timer.Start();
             });
         }
 
-        public void IncrementCounterEvent(object source, ElapsedEventArgs e)
+        public void OnGlobalCounterChangedEvent(object source, ElapsedEventArgs e)
         {
             IncrementCounter();
+            GlobalCounterChangedEvent?.Invoke();
         }
 
         private void IncrementCounter() => Counter++;

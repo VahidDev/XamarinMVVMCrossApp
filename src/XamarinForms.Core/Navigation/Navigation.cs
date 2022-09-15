@@ -16,7 +16,6 @@ namespace XamarinForms.Core.Navigation
         public Navigation(IMvxNavigationService navigationService)
         {
             _navigationService = navigationService;
-
             _mvxViewModels = new List<MvxViewModel>();
         }
 
